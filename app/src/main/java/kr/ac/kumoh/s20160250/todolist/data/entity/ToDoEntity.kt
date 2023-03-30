@@ -1,0 +1,10 @@
+package kr.ac.kumoh.s20160250.todolist.data.entity
+
+
+
+data class ToDoEntity(
+    val id: Long = 0,
+    val title: String,
+    val description: String,
+    val hasCompleted: Boolean = false
+)
