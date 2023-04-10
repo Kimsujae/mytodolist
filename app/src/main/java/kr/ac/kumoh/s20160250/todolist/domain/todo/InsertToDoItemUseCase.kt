@@ -4,12 +4,11 @@ import kr.ac.kumoh.s20160250.todolist.data.entity.ToDoEntity
 import kr.ac.kumoh.s20160250.todolist.data.repository.ToDoRepository
 import kr.ac.kumoh.s20160250.todolist.domain.UseCase
 
-internal class GetToDoListUseCase(
+internal class InsertToDoItemUseCase(
     private val toDoRepository: ToDoRepository
-) : UseCase {
+): UseCase {
 
-    suspend operator fun invoke(): List<ToDoEntity> {
-        return toDoRepository.getToDoList()
+    suspend operator fun invoke(todoItem:ToDoEntity):Long {
+        return toDoRepository.insertToDoItem(todoItem)
     }
-
 }

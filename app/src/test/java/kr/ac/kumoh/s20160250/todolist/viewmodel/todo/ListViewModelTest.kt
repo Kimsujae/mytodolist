@@ -7,6 +7,7 @@ import kr.ac.kumoh.s20160250.todolist.data.entity.ToDoEntity
 import kr.ac.kumoh.s20160250.todolist.domain.todo.GetToDoItemUseCase
 import kr.ac.kumoh.s20160250.todolist.domain.todo.InsertToDoListUseCase
 import kr.ac.kumoh.s20160250.todolist.presentation.list.ListViewModel
+import kr.ac.kumoh.s20160250.todolist.presentation.list.ToDoListState
 import kr.ac.kumoh.s20160250.todolist.viewmodel.ViewModelTest
 import org.junit.Before
 import org.junit.Test
@@ -16,7 +17,7 @@ import org.koin.test.inject
 //ListViewModel을 테스트하기위한 Unit Test Class
 /**
  * 1. initData()
- * 2. viewModel fetch
+ * 2. test viewModel fetch
  * 3. test Item Update
  * 4. test Item Delete all
  **/
@@ -50,17 +51,20 @@ internal class ListViewModelTest : ViewModelTest() {
     }
 
     private fun initData() = runBlockingTest {
+        //InsertToDoListUseCase(mockList)
         insertToDoListUseCase(mockList)
     }
 
     //Test: 입력된 데이터를 불러와서 검증한다
     @Test
-    fun testViewModelFetch(): Unit = runBlockingTest {
+    fun test_View_Model_Fetch(): Unit = runBlockingTest {
         val testObservable = viewModel.todoListLiveData.test()
         viewModel.fetchData()
         testObservable.assertValueSequence(
             listOf(
-                mockList
+                ToDoListState.UnInitialized,
+                ToDoListState.Loading,
+                ToDoListState.Success(mockList)
             )
         )
 
@@ -68,6 +72,7 @@ internal class ListViewModelTest : ViewModelTest() {
     // test:데이터를 업데이트했을때 반영되는가
     @Test
     fun test_item_update(): Unit = runBlockingTest {
+
         val todo =ToDoEntity(
             id = 1,
             title = "title 1",
@@ -77,6 +82,18 @@ internal class ListViewModelTest : ViewModelTest() {
         viewModel.updateEntity(todo)
         assert(getToDoItemUseCase(todo.id)?.hasCompleted ?:false == todo.hasCompleted)
     }
-
+    // test: 데이터를 다 날렸을대 빈상태로 보여 지는가
+    @Test
+    fun test_item_Delete_ALL(): Unit = runBlockingTest {
+        val testObservable = viewModel.todoListLiveData.test()
+        viewModel.deleteAll()
+        testObservable.assertValueSequence(
+            listOf(
+                ToDoListState.UnInitialized,
+                ToDoListState.Loading,
+                ToDoListState.Success(listOf())
+            )
+        )
+    }
 
 }

@@ -7,6 +7,7 @@ import kr.ac.kumoh.s20160250.todolist.domain.UseCase
 internal class InsertToDoListUseCase(
     private val toDoRepository: ToDoRepository
 ): UseCase {
+
     suspend operator fun invoke(toDoList:List<ToDoEntity>){
         return toDoRepository.insertToDoList(toDoList)
     }

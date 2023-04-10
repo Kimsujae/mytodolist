@@ -7,7 +7,7 @@ import kr.ac.kumoh.s20160250.todolist.domain.UseCase
 internal class UpdateToDoUseCase(
     private val toDoRepository: ToDoRepository
 ): UseCase {
-    suspend operator fun invoke(toDoEntity: ToDoEntity):Boolean{
+    suspend operator fun invoke(toDoEntity: ToDoEntity){
         return toDoRepository.updateToDoItem(toDoEntity)
     }
 }

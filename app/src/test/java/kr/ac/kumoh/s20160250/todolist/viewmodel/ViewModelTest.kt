@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.lifecycle.LiveData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.ObsoleteCoroutinesApi
 import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
@@ -23,7 +24,7 @@ import org.mockito.junit.MockitoRule
 @ExperimentalCoroutinesApi
 internal abstract class ViewModelTest : KoinTest {
 
-    @get: Rule
+    @get:Rule
     val mockitoRule: MockitoRule = MockitoJUnit.rule()
 
     @Mock
@@ -46,7 +47,7 @@ internal abstract class ViewModelTest : KoinTest {
         Dispatchers.resetMain() // Main dispatchers를 초기화 해줘야 메모리 누수발생안함
     }
 
-    protected fun <T> LiveData<T>.test(): LiveDataTestObserver<T> {
+    protected fun <T> LiveData<T>.test(): LiveDataTestObserver<T> { //Livedata를 테스트 하기위한 함수
         val testObserver = LiveDataTestObserver<T>()
         observeForever(testObserver)
         return testObserver
